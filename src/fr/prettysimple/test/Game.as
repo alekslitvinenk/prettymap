@@ -5,6 +5,8 @@ package fr.prettysimple.test
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	
+	import starling.display.DisplayObject;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.Touch;
@@ -14,23 +16,36 @@ package fr.prettysimple.test
 	
 	public class Game extends Sprite
 	{
-		private var textures:Vector.<Texture>;
 		private var map:Map;
+		private var zoomIn:DisplayObject;
+		private var zoomOut:DisplayObject;
 		
 		private var dragging:Boolean;
 		private var startDragPoint:Point;
 		
 		public function Game()
 		{
-			init();
+			if(stage)
+			{
+				init();
+			}else
+			{
+				addEventListener(Event.ADDED_TO_STAGE, onAdded);
+			}
 		}
 		
 		private function init():void
 		{
+			createMap();
+			createTools();
+		}
+		
+		private function createMap():void
+		{
 			var bmp:Bitmap = new Assets.new_york_map();
 			var bmd:BitmapData = bmp.bitmapData;
 			
-			textures = new Vector.<Texture>();
+			var textures:Vector.<Texture> = new Vector.<Texture>();
 			
 			for(var i:uint = 0; i < 5; i++)
 			{
@@ -47,15 +62,55 @@ package fr.prettysimple.test
 			}
 			
 			addChild(map = new Map(textures));
-			addEventListener(Event.ADDED_TO_STAGE, onAdded);
+			map.scaleX = stage.stageWidth/Config.mapWidth;
+			map.scaleY = map.scaleX;
+			map.addEventListener(TouchEvent.TOUCH, onMapTouch);
+		}
+		
+		private function createTools():void
+		{
+			addChild(zoomIn = new Image(Texture.fromBitmap(new Assets.zoom_in())));
+			zoomIn.x = stage.stageWidth - zoomIn.width;
+			zoomIn.addEventListener(TouchEvent.TOUCH, onZoomIn);
+			
+			addChild(zoomOut = new Image(Texture.fromBitmap(new Assets.zoom_out())));
+			zoomOut.x = stage.stageWidth - zoomOut.width;
+			zoomOut.y = zoomOut.height;
+			zoomOut.addEventListener(TouchEvent.TOUCH, onZoomOut);
 		}
 		
 		//events
 		private function onAdded(evt:Event):void
 		{
-			map.scaleX = stage.stageWidth/Config.mapWidth;
-			map.scaleY = map.scaleX;
-			map.addEventListener(TouchEvent.TOUCH, onMapTouch);
+			init();
+		}
+		
+		private function onZoomIn(evt:TouchEvent):void
+		{
+			var touch:Touch = evt.getTouch(stage);
+			if(!touch) return;
+			
+			if(touch.phase == TouchPhase.ENDED)
+			{
+				map.pivotX = (stage.stageWidth >> 1) - map.x;
+				map.pivotY = (stage.stageHeight >> 1) - map.y;
+				
+				map.scaleX += 0.02;
+				map.scaleY = map.scaleX;
+			}
+			
+		}
+		
+		private function onZoomOut(evt:TouchEvent):void
+		{
+			var touch:Touch = evt.getTouch(stage);
+			if(!touch) return;
+			
+			if(touch.phase == TouchPhase.ENDED)
+			{
+				map.scaleX -= 0.02;
+				map.scaleY = map.scaleX;
+			}
 		}
 		
 		private function onMapTouch(evt:TouchEvent):void

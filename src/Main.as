@@ -15,7 +15,8 @@ package
 		{
 			mStarling = new Starling(Game, stage);
 			mStarling.antiAliasing = 4;
-			mStarling.enableErrorChecking = true;
+			mStarling.showStats = true;
+			//mStarling.enableErrorChecking = true;
 			mStarling.start();
 		}
 	}
