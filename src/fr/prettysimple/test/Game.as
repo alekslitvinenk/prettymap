@@ -4,6 +4,7 @@ package fr.prettysimple.test
 	import flash.display.BitmapData;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import starling.display.DisplayObject;
 	import starling.display.Image;
@@ -21,7 +22,9 @@ package fr.prettysimple.test
 		private var zoomOut:DisplayObject;
 		
 		private var dragging:Boolean;
-		private var startDragPoint:Point;
+		private var startDragTouchPoint:Point;
+		private var startDragMapPoint:Point;
+		private var dragRect:Rectangle;
 		
 		public function Game()
 		{
@@ -62,8 +65,7 @@ package fr.prettysimple.test
 			}
 			
 			addChild(map = new Map(textures));
-			map.scaleX = stage.stageWidth/Config.mapWidth;
-			map.scaleY = map.scaleX;
+			map.scaleY = map.scaleX = stage.stageWidth/Config.mapWidth;
 			map.addEventListener(TouchEvent.TOUCH, onMapTouch);
 		}
 		
@@ -75,7 +77,7 @@ package fr.prettysimple.test
 			
 			addChild(zoomOut = new Image(Texture.fromBitmap(new Assets.zoom_out())));
 			zoomOut.x = stage.stageWidth - zoomOut.width;
-			zoomOut.y = zoomOut.height;
+			zoomOut.y = 70;
 			zoomOut.addEventListener(TouchEvent.TOUCH, onZoomOut);
 		}
 		
@@ -92,9 +94,6 @@ package fr.prettysimple.test
 			
 			if(touch.phase == TouchPhase.ENDED)
 			{
-				map.pivotX = (stage.stageWidth >> 1) - map.x;
-				map.pivotY = (stage.stageHeight >> 1) - map.y;
-				
 				map.scaleX += 0.02;
 				map.scaleY = map.scaleX;
 			}
@@ -122,7 +121,9 @@ package fr.prettysimple.test
 			if(touch.phase == TouchPhase.BEGAN)
 			{
 				dragging = true;
-				startDragPoint = touch.getLocation(stage).subtract(new Point(map.x, map.y));
+				startDragMapPoint = new Point(map.x, map.y);
+				startDragTouchPoint = touch.getLocation(stage);
+				dragRect = new Rectangle(stage.stageWidth - map.width, stage.stageHeight - map.height, map.width - stage.stageWidth, map.height - stage.stageHeight);
 			}
 			
 			if(touch.phase == TouchPhase.MOVED)
@@ -130,9 +131,28 @@ package fr.prettysimple.test
 				if(dragging)
 				{
 					var pt:Point = touch.getLocation(stage);
-					var delta:Point = pt.subtract(startDragPoint);
-					map.x = delta.x;
-					map.y = delta.y;
+					var delta:Point = pt.subtract(startDragTouchPoint);
+					var dest:Point = startDragMapPoint.add(delta);
+					
+					if(dest.x > 0)
+					{
+						startDragTouchPoint.x -= -delta.x;
+						dest.x = 0;
+					}
+					
+					if(delta.x <= (stage.stageWidth - (map.x + map.width)))
+					{
+						dest.x = -map.width + stage.stageWidth;
+					}
+					
+					if(dest.y > 0)
+					{
+						startDragTouchPoint.y -= -delta.y;
+						dest.y = 0;
+					}
+					
+					map.x = dest.x;
+					map.y = dest.y;
 				}
 			}
 			
