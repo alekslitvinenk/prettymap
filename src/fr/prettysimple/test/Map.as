@@ -1,5 +1,7 @@
 package fr.prettysimple.test
 {
+	import flash.geom.Point;
+	
 	import starling.animation.Tween;
 	import starling.core.Starling;
 	import starling.display.Image;
@@ -17,6 +19,9 @@ package fr.prettysimple.test
 		private var graund:Sprite;
 		private var madison:MovieClip;
 		private var arrow:MovieClip;
+		
+		private var zoomPoint:Point;
+		private var mapPoint:Point;
 		
 		private var _data:Vector.<Texture>;
 
@@ -57,6 +62,50 @@ package fr.prettysimple.test
 			
 			_data = textures;
 			commitData();
+		}
+		
+		public function initScale(val:Number):void
+		{
+			this.scaleY = this.scaleX = val;
+			
+			trace(val);
+		}
+		
+		public function zoomIn():void
+		{
+			zoomPoint = globalToLocal(new Point(stage.stageWidth/2, stage.stageHeight/2));
+			mapPoint = new Point(x, y);
+			
+			var tween:Tween = new Tween(this, 0.3);
+			tween.scaleTo(this.scaleX * 1.3);
+			tween.onComplete = updateAfterZoom;
+			
+			Starling.juggler.add(tween);
+			
+			trace("zoomIn");
+		}
+		
+		private function updateAfterZoom():void
+		{
+			var changePt:Point = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
+			var delta:Point = changePt.subtract(zoomPoint);
+			
+			trace(delta);
+			
+			this.x += delta.x/2;
+			this.y += delta.y/2;
+		}
+		
+		public function zoomOut():void
+		{
+			zoomPoint = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
+			mapPoint = new Point(x, y);
+			
+			var tween:Tween = new Tween(this, 0.3);
+			tween.scaleTo(this.scaleX * 0.8);
+			tween.onUpdate = updateAfterZoom;
+			
+			Starling.juggler.add(tween);
 		}
 		
 		private function commitData():void

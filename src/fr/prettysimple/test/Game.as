@@ -66,7 +66,7 @@ package fr.prettysimple.test
 			}
 			
 			addChild(map = new Map(textures));
-			map.scaleY = map.scaleX = stage.stageWidth/Config.mapWidth;
+			map.initScale(stage.stageWidth/Config.mapWidth);
 			map.addEventListener(TouchEvent.TOUCH, onMapTouch);
 		}
 		
@@ -99,8 +99,7 @@ package fr.prettysimple.test
 			
 			if(touch.phase == TouchPhase.ENDED)
 			{
-				map.scaleX += 0.02;
-				map.scaleY = map.scaleX;
+				map.zoomIn();
 			}
 			
 		}
@@ -112,8 +111,7 @@ package fr.prettysimple.test
 			
 			if(touch.phase == TouchPhase.ENDED)
 			{
-				map.scaleX -= 0.02;
-				map.scaleY = map.scaleX;
+				map.zoomOut();
 			}
 		}
 		
