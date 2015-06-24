@@ -10,5 +10,23 @@ package fr.prettysimple.test
 		
 		[Embed(source="/../assets/zoom_out.png")]
 		public static const zoom_out:Class;
+		
+		[Embed(source="/../assets/madison.png")]
+		public static const madison_png:Class;
+		
+		[Embed(source="/../assets/madison.xml", mimeType="application/octet-stream")]
+		public static const madison_xml:Class;
+		
+		[Embed(source="/../assets/arrow.png")]
+		public static const arrow_png:Class;
+		
+		[Embed(source="/../assets/arrow.xml", mimeType="application/octet-stream")]
+		public static const arrow_xml:Class;
+		
+		[Embed(source="/../assets/exclamation.png")]
+		public static const exclam_png:Class;
+		
+		[Embed(source="/../assets/exclamation.xml", mimeType="application/octet-stream")]
+		public static const exclam_xml:Class;
 	}
 }

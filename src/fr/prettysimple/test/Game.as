@@ -20,6 +20,7 @@ package fr.prettysimple.test
 		private var map:Map;
 		private var zoomIn:DisplayObject;
 		private var zoomOut:DisplayObject;
+		private var newTask:DisplayObject;
 		
 		private var dragging:Boolean;
 		private var startDragTouchPoint:Point;
@@ -79,6 +80,10 @@ package fr.prettysimple.test
 			zoomOut.x = stage.stageWidth - zoomOut.width;
 			zoomOut.y = 70;
 			zoomOut.addEventListener(TouchEvent.TOUCH, onZoomOut);
+			
+			addChild(newTask = new TaskView());
+			newTask.x = stage.stageWidth - 80;
+			newTask.y = 140;
 		}
 		
 		//events
@@ -134,7 +139,7 @@ package fr.prettysimple.test
 					var delta:Point = pt.subtract(startDragTouchPoint);
 					var dest:Point = startDragMapPoint.add(delta);
 					
-					if(dest.x > 0)
+					/*if(dest.x > 0)
 					{
 						startDragTouchPoint.x -= -delta.x;
 						dest.x = 0;
@@ -149,7 +154,7 @@ package fr.prettysimple.test
 					{
 						startDragTouchPoint.y -= -delta.y;
 						dest.y = 0;
-					}
+					}*/
 					
 					map.x = dest.x;
 					map.y = dest.y;
