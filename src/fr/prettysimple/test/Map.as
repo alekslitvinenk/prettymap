@@ -21,9 +21,23 @@ package fr.prettysimple.test
 		private var arrow:MovieClip;
 		
 		private var zoomPoint:Point;
-		private var mapPoint:Point;
+		
+		private var zoomLevels:Vector.<Number>;
+		private var zoomIndex:uint;
+		
+		private var _screenCenter:Point;
 		
 		private var _data:Vector.<Texture>;
+
+		public function get screenCenter():Point
+		{
+			if(!_screenCenter)
+			{
+				_screenCenter = new Point(stage.stageWidth >> 1, stage.stageHeight >> 1);
+			}
+			
+			return _screenCenter;
+		}
 
 		public function get data():Vector.<Texture>
 		{
@@ -35,9 +49,15 @@ package fr.prettysimple.test
 			_data = value;
 			commitData();
 		}
-
 		
 		public function Map(textures:Vector.<Texture>)
+		{
+			_data = textures;
+			
+			init();
+		}
+		
+		private function init():void
 		{
 			addChild(graund = new Sprite());
 			
@@ -64,7 +84,6 @@ package fr.prettysimple.test
 			
 			Starling.juggler.add(arrow);
 			
-			_data = textures;
 			commitData();
 		}
 		
@@ -72,31 +91,46 @@ package fr.prettysimple.test
 		{
 			this.scaleY = this.scaleX = val;
 			
-			trace(val);
+			var scaleStep:Number = (1 - val)/3;
+			
+			zoomLevels = new Vector.<Number>();
+			zoomLevels.push(val);
+			zoomLevels.push(val + scaleStep);
+			zoomLevels.push(val + scaleStep * 2);
+			zoomLevels.push(1);
+			
+			zoomIndex = 0;
 		}
 		
 		public function zoomIn():void
 		{
-			zoomPoint = globalToLocal(new Point(stage.stageWidth/2, stage.stageHeight/2));
-			mapPoint = new Point(x, y);
+			zoomPoint = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
+			
+			zoomIndex++;
+			if(zoomIndex == zoomLevels.length)
+			{
+				zoomIndex = zoomLevels.length - 1;
+			}
 			
 			var tween:Tween = new Tween(this, 0.3);
-			tween.scaleTo(this.scaleX * 1.3);
+			tween.scaleTo(zoomLevels[zoomIndex]);
 			tween.onUpdate = updateAfterZoom;
 			
 			Starling.juggler.removeTweens(this);
 			Starling.juggler.add(tween);
-			
-			trace("zoomIn");
 		}
 		
 		public function zoomOut():void
 		{
 			zoomPoint = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
-			mapPoint = new Point(x, y);
+			
+			if(zoomIndex)
+			{
+				zoomIndex--;
+			}
 			
 			var tween:Tween = new Tween(this, 0.3);
-			tween.scaleTo(this.scaleX * 0.8);
+			tween.scaleTo(zoomLevels[zoomIndex]);
 			tween.onUpdate = updateAfterZoom;
 			
 			Starling.juggler.removeTweens(this);
@@ -111,19 +145,17 @@ package fr.prettysimple.test
 			var tween:Tween = new Tween(this, 0.3);
 			tween.moveTo(this.x - delta.x, this.y - delta.y);
 			
-			//Starling.juggler.removeTweens(this);
+			Starling.juggler.removeTweens(this);
 			Starling.juggler.add(tween);
 		}
 		
 		private function updateAfterZoom():void
 		{
-			var changePt:Point = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
-			var delta:Point = changePt.subtract(zoomPoint);
+			var changePt:Point = localToGlobal(zoomPoint);
+			var delta:Point = changePt.subtract(screenCenter);
 			
-			trace(delta);
-			
-			this.x += delta.x/2;
-			this.y += delta.y/2;
+			this.x -= delta.x;
+			this.y -= delta.y;
 		}
 		
 		private function commitData():void
