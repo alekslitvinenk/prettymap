@@ -2,7 +2,6 @@ package fr.prettysimple.test
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.errors.IllegalOperationError;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -118,7 +117,7 @@ package fr.prettysimple.test
 			
 			tools.addChild(newTask = new ToolButton(new TaskView()));
 			newTask.x = stage.stageWidth - 65;
-			newTask.y = 190;
+			newTask.y = 200;
 			newTask.addEventListener(TouchEvent.TOUCH, onTask);
 		}
 		
