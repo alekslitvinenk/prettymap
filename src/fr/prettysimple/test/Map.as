@@ -45,8 +45,10 @@ package fr.prettysimple.test
 			
 			addChild(madison = new MovieClip(mtAtlas.getTextures("madison_anim")));
 			madison.addEventListener(TouchEvent.TOUCH, onMadisonTouch);
-			madison.x = 1335;
-			madison.y = 1630;
+			madison.x = Config.MADISON_SQUARE.x;
+			madison.y = Config.MADISON_SQUARE.y;
+			madison.pivotX = madison.width >> 1;
+			madison.pivotY = madison.height >> 1;
 			madison.stop();
 			Starling.juggler.add(madison);
 			
@@ -54,8 +56,10 @@ package fr.prettysimple.test
 			
 			addChild(arrow = new MovieClip(arAtlas.getTextures("arrow_anim"), 18));
 			arrow.addEventListener(TouchEvent.TOUCH, onMadisonTouch);
-			arrow.x = 1355;
-			arrow.y = 1200;
+			arrow.x = Config.MADISON_SQUARE.x;
+			arrow.y = Config.MADISON_SQUARE.y;
+			arrow.pivotX = arrow.width >> 1;
+			arrow.pivotY = arrow.height;
 			arrow.touchable = false;
 			
 			Starling.juggler.add(arrow);
@@ -78,22 +82,12 @@ package fr.prettysimple.test
 			
 			var tween:Tween = new Tween(this, 0.3);
 			tween.scaleTo(this.scaleX * 1.3);
-			tween.onComplete = updateAfterZoom;
+			tween.onUpdate = updateAfterZoom;
 			
+			Starling.juggler.removeTweens(this);
 			Starling.juggler.add(tween);
 			
 			trace("zoomIn");
-		}
-		
-		private function updateAfterZoom():void
-		{
-			var changePt:Point = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
-			var delta:Point = changePt.subtract(zoomPoint);
-			
-			trace(delta);
-			
-			this.x += delta.x/2;
-			this.y += delta.y/2;
 		}
 		
 		public function zoomOut():void
@@ -105,7 +99,31 @@ package fr.prettysimple.test
 			tween.scaleTo(this.scaleX * 0.8);
 			tween.onUpdate = updateAfterZoom;
 			
+			Starling.juggler.removeTweens(this);
 			Starling.juggler.add(tween);
+		}
+		
+		public function scrollTo(dest:Point):void
+		{
+			var center:Point = new Point(stage.stageWidth >> 1, stage.stageHeight >> 1);
+			var delta:Point = localToGlobal(dest).subtract(center);
+			
+			var tween:Tween = new Tween(this, 0.3);
+			tween.moveTo(this.x - delta.x, this.y - delta.y);
+			
+			//Starling.juggler.removeTweens(this);
+			Starling.juggler.add(tween);
+		}
+		
+		private function updateAfterZoom():void
+		{
+			var changePt:Point = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
+			var delta:Point = changePt.subtract(zoomPoint);
+			
+			trace(delta);
+			
+			this.x += delta.x/2;
+			this.y += delta.y/2;
 		}
 		
 		private function commitData():void

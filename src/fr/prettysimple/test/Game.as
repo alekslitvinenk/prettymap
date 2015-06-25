@@ -68,7 +68,7 @@ package fr.prettysimple.test
 			}
 			
 			addChild(map = new Map(textures));
-			map.initScale(stage.stageWidth/Config.mapWidth);
+			map.initScale(stage.stageWidth/Config.MAP_WIDTH);
 			map.addEventListener(TouchEvent.TOUCH, onMapTouch);
 		}
 		
@@ -86,6 +86,7 @@ package fr.prettysimple.test
 			addChild(newTask = new ToolButton(new TaskView()));
 			newTask.x = stage.stageWidth - 65;
 			newTask.y = 190;
+			newTask.addEventListener(TouchEvent.TOUCH, onTask);
 		}
 		
 		//events
@@ -114,6 +115,17 @@ package fr.prettysimple.test
 			if(touch.phase == TouchPhase.ENDED)
 			{
 				map.zoomOut();
+			}
+		}
+		
+		private function onTask(evt:TouchEvent):void
+		{
+			var touch:Touch = evt.getTouch(stage);
+			if(!touch) return;
+			
+			if(touch.phase == TouchPhase.ENDED)
+			{
+				map.scrollTo(Config.MADISON_SQUARE);
 			}
 		}
 		
