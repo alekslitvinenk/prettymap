@@ -189,6 +189,13 @@ package fr.prettysimple.test
 			{
 				madison.stop();
 			}
+			
+			var clickTouch:Touch = evt.getTouch(madison, TouchPhase.ENDED);
+			
+			if(clickTouch)
+			{
+				Game.instance.showPopup();
+			}
 		}
 	}
 }

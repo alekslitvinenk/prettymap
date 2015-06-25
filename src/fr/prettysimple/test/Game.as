@@ -2,6 +2,7 @@ package fr.prettysimple.test
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.errors.IllegalOperationError;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -17,7 +18,10 @@ package fr.prettysimple.test
 	
 	public class Game extends Sprite
 	{
+		//layers
 		private var map:Map;
+		private var tools:DisplayObjectContainer;
+		private var windows:DisplayObjectContainer
 		
 		//tools
 		private var zoomIn:DisplayObjectContainer;
@@ -29,6 +33,25 @@ package fr.prettysimple.test
 		private var startDragMapPoint:Point;
 		private var dragRect:Rectangle;
 		
+		private var _popupWindow:PopupWindow;
+		
+		private static var _instance:Game;
+		
+		public function get popupWindow():PopupWindow
+		{
+			if(!_popupWindow)
+			{
+				_popupWindow = new PopupWindow();
+			}
+			
+			return _popupWindow;
+		}
+
+		public static function get instance():Game
+		{
+			return _instance;
+		}
+		
 		public function Game()
 		{
 			if(stage)
@@ -38,12 +61,20 @@ package fr.prettysimple.test
 			{
 				addEventListener(Event.ADDED_TO_STAGE, onAdded);
 			}
+			
+			_instance = this;
+		}
+		
+		public function showPopup():void
+		{
+			windows.addChild(popupWindow);
 		}
 		
 		private function init():void
 		{
 			createMap();
 			createTools();
+			addChild(windows = new Sprite());
 		}
 		
 		private function createMap():void
@@ -74,16 +105,18 @@ package fr.prettysimple.test
 		
 		private function createTools():void
 		{
-			addChild(zoomIn = new ToolButton(new Image(Texture.fromBitmap(new Assets.zoom_in()))));
+			addChild(tools = new Sprite());
+			
+			tools.addChild(zoomIn = new ToolButton(new Image(Texture.fromBitmap(new Assets.zoom_in()))));
 			zoomIn.x = stage.stageWidth - 70;
 			zoomIn.addEventListener(TouchEvent.TOUCH, onZoomIn);
 			
-			addChild(zoomOut = new ToolButton(new Image(Texture.fromBitmap(new Assets.zoom_out()))));
+			tools.addChild(zoomOut = new ToolButton(new Image(Texture.fromBitmap(new Assets.zoom_out()))));
 			zoomOut.x = stage.stageWidth - 70;
 			zoomOut.y = 130;
 			zoomOut.addEventListener(TouchEvent.TOUCH, onZoomOut);
 			
-			addChild(newTask = new ToolButton(new TaskView()));
+			tools.addChild(newTask = new ToolButton(new TaskView()));
 			newTask.x = stage.stageWidth - 65;
 			newTask.y = 190;
 			newTask.addEventListener(TouchEvent.TOUCH, onTask);

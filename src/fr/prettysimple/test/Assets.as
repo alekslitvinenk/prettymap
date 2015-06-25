@@ -28,5 +28,14 @@ package fr.prettysimple.test
 		
 		[Embed(source="/../assets/exclamation.xml", mimeType="application/octet-stream")]
 		public static const exclam_xml:Class;
+		
+		[Embed(source="/../assets/window.png")]
+		public static const window_png:Class;
+		
+		[Embed(source="/../assets/close_button.png")]
+		public static const close_png:Class;
+		
+		[Embed(source="/../assets/close_button.xml", mimeType="application/octet-stream")]
+		public static const close_xml:Class;
 	}
 }
