@@ -6,7 +6,7 @@ package fr.prettysimple.test
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import starling.display.DisplayObject;
+	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -18,9 +18,11 @@ package fr.prettysimple.test
 	public class Game extends Sprite
 	{
 		private var map:Map;
-		private var zoomIn:DisplayObject;
-		private var zoomOut:DisplayObject;
-		private var newTask:DisplayObject;
+		
+		//tools
+		private var zoomIn:DisplayObjectContainer;
+		private var zoomOut:DisplayObjectContainer;
+		private var newTask:DisplayObjectContainer;
 		
 		private var dragging:Boolean;
 		private var startDragTouchPoint:Point;
@@ -72,18 +74,18 @@ package fr.prettysimple.test
 		
 		private function createTools():void
 		{
-			addChild(zoomIn = new Image(Texture.fromBitmap(new Assets.zoom_in())));
-			zoomIn.x = stage.stageWidth - zoomIn.width;
+			addChild(zoomIn = new ToolButton(new Image(Texture.fromBitmap(new Assets.zoom_in()))));
+			zoomIn.x = stage.stageWidth - 70;
 			zoomIn.addEventListener(TouchEvent.TOUCH, onZoomIn);
 			
-			addChild(zoomOut = new Image(Texture.fromBitmap(new Assets.zoom_out())));
-			zoomOut.x = stage.stageWidth - zoomOut.width;
-			zoomOut.y = 70;
+			addChild(zoomOut = new ToolButton(new Image(Texture.fromBitmap(new Assets.zoom_out()))));
+			zoomOut.x = stage.stageWidth - 70;
+			zoomOut.y = 130;
 			zoomOut.addEventListener(TouchEvent.TOUCH, onZoomOut);
 			
-			addChild(newTask = new TaskView());
-			newTask.x = stage.stageWidth - 80;
-			newTask.y = 140;
+			addChild(newTask = new ToolButton(new TaskView()));
+			newTask.x = stage.stageWidth - 65;
+			newTask.y = 190;
 		}
 		
 		//events
