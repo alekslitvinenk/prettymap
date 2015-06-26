@@ -15,6 +15,11 @@ package fr.prettysimple.test
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
 	
+	/**
+	 * App facade 
+	 * @author Alexander Litvinenko
+	 * 
+	 */	
 	public class Game extends Sprite
 	{
 		//layers
@@ -34,8 +39,6 @@ package fr.prettysimple.test
 		
 		private var _popupWindow:PopupWindow;
 		
-		private static var _instance:Game;
-		
 		public function get popupWindow():PopupWindow
 		{
 			if(!_popupWindow)
@@ -45,6 +48,8 @@ package fr.prettysimple.test
 			
 			return _popupWindow;
 		}
+		
+		private static var _instance:Game;
 
 		public static function get instance():Game
 		{
@@ -183,25 +188,7 @@ package fr.prettysimple.test
 					var delta:Point = pt.subtract(startDragTouchPoint);
 					var dest:Point = startDragMapPoint.add(delta);
 					
-					/*if(dest.x > 0)
-					{
-						startDragTouchPoint.x -= -delta.x;
-						dest.x = 0;
-					}
-					
-					if(delta.x <= (stage.stageWidth - (map.x + map.width)))
-					{
-						dest.x = -map.width + stage.stageWidth;
-					}
-					
-					if(dest.y > 0)
-					{
-						startDragTouchPoint.y -= -delta.y;
-						dest.y = 0;
-					}*/
-					
-					map.x = dest.x;
-					map.y = dest.y;
+					map.moveTo(dest);
 				}
 			}
 			

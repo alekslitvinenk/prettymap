@@ -13,6 +13,13 @@ package fr.prettysimple.test
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
+	/**
+	 * Map abstraction
+	 * incapsulates all logic related to map
+	 *  
+	 * @author Alexander Litvinenko
+	 * 
+	 */	
 	public class Map extends Sprite
 	{
 		//layers
@@ -102,6 +109,10 @@ package fr.prettysimple.test
 			zoomIndex = 0;
 		}
 		
+		/**
+		 * Animated map scaling up
+		 * 
+		 */		
 		public function zoomIn():void
 		{
 			zoomPoint = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
@@ -120,6 +131,10 @@ package fr.prettysimple.test
 			Starling.juggler.add(tween);
 		}
 		
+		/**
+		 * Animated map scaling down
+		 * 
+		 */	
 		public function zoomOut():void
 		{
 			zoomPoint = globalToLocal(new Point(stage.stageWidth >> 1, stage.stageHeight >> 1));
@@ -137,6 +152,11 @@ package fr.prettysimple.test
 			Starling.juggler.add(tween);
 		}
 		
+		/**
+		 * Animated map movement to destination point
+		 * @param dest
+		 * 
+		 */		
 		public function scrollTo(dest:Point):void
 		{
 			var center:Point = new Point(stage.stageWidth >> 1, stage.stageHeight >> 1);
@@ -144,18 +164,69 @@ package fr.prettysimple.test
 			
 			var tween:Tween = new Tween(this, 0.3);
 			tween.moveTo(this.x - delta.x, this.y - delta.y);
+			tween.onUpdate = updateAfterScroll;
 			
 			Starling.juggler.removeTweens(this);
 			Starling.juggler.add(tween);
 		}
 		
+		/**
+		 * Instantly moves map to destination point 
+		 * @param dest
+		 * 
+		 */			
+		public function moveTo(dest:Point):void
+		{
+			dest = protectEdges(dest);
+			
+			this.x = dest.x;
+			this.y = dest.y;
+		}
+		
+		/**
+		 * Compensate map movements after each tween update
+		 * to make map scaling look like it performs at screen center 
+		 * 
+		 */		
 		private function updateAfterZoom():void
 		{
 			var changePt:Point = localToGlobal(zoomPoint);
-			var delta:Point = changePt.subtract(screenCenter);
+			var dest:Point = screenCenter.subtract(changePt);
 			
-			this.x -= delta.x;
-			this.y -= delta.y;
+			dest = protectEdges(dest);
+			
+			this.x += dest.x;
+			this.y += dest.y;
+		}
+		
+		/**
+		 * Update map position after tweeen update 
+		 * 
+		 */		
+		private function updateAfterScroll():void
+		{
+			moveTo(new Point(x, y));
+		}
+		
+		/**
+		 * Protectes map from appearing empty spaces around map edges
+		 * @param dest
+		 * @return 
+		 * 
+		 */		
+		private function protectEdges(dest:Point):Point
+		{
+			if(dest.x > 0)
+			{
+				dest.x = 0;
+			}
+			
+			if(dest.y > 0)
+			{
+				dest.y = 0;
+			}
+			
+			return dest;
 		}
 		
 		private function commitData():void
