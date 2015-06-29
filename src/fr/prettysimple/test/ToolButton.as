@@ -8,6 +8,7 @@ package fr.prettysimple.test
 	
 	/**
 	 * Base class for tools 
+	 * 
 	 * @author Alexander Litvinenko
 	 * 
 	 */	

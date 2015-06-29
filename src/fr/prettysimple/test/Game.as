@@ -18,6 +18,7 @@ package fr.prettysimple.test
 	
 	/**
 	 * App facade 
+	 * 
 	 * @author Alexander Litvinenko
 	 * 
 	 */	
@@ -40,8 +41,6 @@ package fr.prettysimple.test
 		
 		private var _atlas:TextureAtlas;
 		
-		private var _popupWindow:PopupWindow;
-		
 		public function get atlas():TextureAtlas
 		{
 			if(!_atlas)
@@ -51,6 +50,8 @@ package fr.prettysimple.test
 			
 			return _atlas;
 		}
+		
+		private var _popupWindow:PopupWindow;
 
 		public function get popupWindow():PopupWindow
 		{

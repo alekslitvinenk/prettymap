@@ -11,7 +11,6 @@ package fr.prettysimple.test
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
-	import starling.textures.TextureAtlas;
 	
 	/**
 	 * Map abstraction

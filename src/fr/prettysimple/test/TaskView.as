@@ -4,6 +4,11 @@ package fr.prettysimple.test
 	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	
+	/**
+	 *  
+	 * @author Alexander Litvinenko
+	 * 
+	 */	
 	public class TaskView extends Sprite
 	{
 		private var exclam:MovieClip;

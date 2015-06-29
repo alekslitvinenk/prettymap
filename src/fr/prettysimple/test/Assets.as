@@ -1,5 +1,11 @@
 package fr.prettysimple.test
 {
+	/**
+	 * Embedded asets
+	 *  
+	 * @author Alexander Litvinenko
+	 * 
+	 */	
 	public class Assets
 	{
 		[Embed(source="/../assets/new_york_map.jpg")]

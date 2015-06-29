@@ -2,6 +2,12 @@ package fr.prettysimple.test
 {
 	import flash.geom.Point;
 
+	/**
+	 * Hold app constants
+	 *  
+	 * @author Alexander Litvinenko
+	 * 
+	 */	
 	public class Config
 	{
 		public static const MAP_WIDTH:Number = 3398;

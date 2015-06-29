@@ -11,6 +11,7 @@ package fr.prettysimple.test
 	
 	/**
 	 * Popup window 
+	 * 
 	 * @author Alexander Litvinenko
 	 * 
 	 */	
