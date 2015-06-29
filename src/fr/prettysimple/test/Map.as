@@ -68,9 +68,7 @@ package fr.prettysimple.test
 		{
 			addChild(graund = new Sprite());
 			
-			var mtAtlas:TextureAtlas = new TextureAtlas(Texture.fromBitmap(new Assets.madison_png()), XML(new Assets.madison_xml()));
-			
-			addChild(madison = new MovieClip(mtAtlas.getTextures("madison_anim")));
+			addChild(madison = new MovieClip(Game.instance.atlas.getTextures("madison_anim"), 8));
 			madison.addEventListener(TouchEvent.TOUCH, onMadisonTouch);
 			madison.x = Config.MADISON_SQUARE.x;
 			madison.y = Config.MADISON_SQUARE.y;
@@ -79,9 +77,7 @@ package fr.prettysimple.test
 			madison.stop();
 			Starling.juggler.add(madison);
 			
-			var arAtlas:TextureAtlas = new TextureAtlas(Texture.fromBitmap(new Assets.arrow_png()), XML(new Assets.arrow_xml()));
-			
-			addChild(arrow = new MovieClip(arAtlas.getTextures("arrow_anim"), 18));
+			addChild(arrow = new MovieClip(Game.instance.atlas.getTextures("arrow_anim"), 18));
 			arrow.addEventListener(TouchEvent.TOUCH, onMadisonTouch);
 			arrow.x = Config.MADISON_SQUARE.x;
 			arrow.y = Config.MADISON_SQUARE.y;

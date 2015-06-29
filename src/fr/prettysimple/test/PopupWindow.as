@@ -8,8 +8,6 @@ package fr.prettysimple.test
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.textures.Texture;
-	import starling.textures.TextureAtlas;
 	
 	/**
 	 * Popup window 
@@ -28,11 +26,9 @@ package fr.prettysimple.test
 		
 		private function init():void
 		{
-			addChild(border = new Image(Texture.fromBitmap(new Assets.window_png())));
+			addChild(border = new Image(Game.instance.atlas.getTexture("window")));
 			
-			var cbATlas:TextureAtlas = new TextureAtlas(Texture.fromBitmap(new Assets.close_png()), XML(new Assets.close_xml()));
-			
-			addChild(closeBtn = new Button(cbATlas.getTexture("CloseButton0000"), "", cbATlas.getTexture("CloseButton0002"), cbATlas.getTexture("CloseButton0001")));
+			addChild(closeBtn = new Button(Game.instance.atlas.getTexture("CloseButton0001"), "", Game.instance.atlas.getTexture("CloseButton0003"), Game.instance.atlas.getTexture("CloseButton0002")));
 			closeBtn.x = border.width - closeBtn.width * 0.7;
 			closeBtn.y = -closeBtn.height * 0.4;
 			closeBtn.addEventListener(Event.TRIGGERED, onClose);

@@ -14,6 +14,7 @@ package fr.prettysimple.test
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
+	import starling.textures.TextureAtlas;
 	
 	/**
 	 * App facade 
@@ -37,8 +38,20 @@ package fr.prettysimple.test
 		private var startDragMapPoint:Point;
 		private var dragRect:Rectangle;
 		
+		private var _atlas:TextureAtlas;
+		
 		private var _popupWindow:PopupWindow;
 		
+		public function get atlas():TextureAtlas
+		{
+			if(!_atlas)
+			{
+				_atlas = new TextureAtlas(Texture.fromBitmap(new Assets.atlas_png()), XML(new Assets.atlas_xml()));
+			}
+			
+			return _atlas;
+		}
+
 		public function get popupWindow():PopupWindow
 		{
 			if(!_popupWindow)
@@ -111,11 +124,11 @@ package fr.prettysimple.test
 		{
 			addChild(tools = new Sprite());
 			
-			tools.addChild(zoomIn = new ToolButton(new Image(Texture.fromBitmap(new Assets.zoom_in()))));
+			tools.addChild(zoomIn = new ToolButton(new Image(atlas.getTexture("zoom_in"))));
 			zoomIn.x = stage.stageWidth - 70;
 			zoomIn.addEventListener(TouchEvent.TOUCH, onZoomIn);
 			
-			tools.addChild(zoomOut = new ToolButton(new Image(Texture.fromBitmap(new Assets.zoom_out()))));
+			tools.addChild(zoomOut = new ToolButton(new Image(atlas.getTexture("zoom_out"))));
 			zoomOut.x = stage.stageWidth - 70;
 			zoomOut.y = 130;
 			zoomOut.addEventListener(TouchEvent.TOUCH, onZoomOut);
