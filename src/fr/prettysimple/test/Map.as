@@ -33,8 +33,6 @@ package fr.prettysimple.test
 		private var zoomIndex:uint;
 		
 		private var _screenCenter:Point;
-		
-		private var _data:Vector.<Texture>;
 
 		public function get screenCenter():Point
 		{
@@ -45,6 +43,8 @@ package fr.prettysimple.test
 			
 			return _screenCenter;
 		}
+		
+		private var _data:Vector.<Texture>;
 
 		public function get data():Vector.<Texture>
 		{
@@ -125,7 +125,7 @@ package fr.prettysimple.test
 			
 			var tween:Tween = new Tween(this, 0.3);
 			tween.scaleTo(zoomLevels[zoomIndex]);
-			tween.onUpdate = updateAfterZoom;
+			tween.onUpdate = updateAfterZoomIn;
 			
 			Starling.juggler.removeTweens(this);
 			Starling.juggler.add(tween);
@@ -146,7 +146,7 @@ package fr.prettysimple.test
 			
 			var tween:Tween = new Tween(this, 0.3);
 			tween.scaleTo(zoomLevels[zoomIndex]);
-			tween.onUpdate = updateAfterZoom;
+			tween.onUpdate = updateAfterZoomOut;
 			
 			Starling.juggler.removeTweens(this);
 			Starling.juggler.add(tween);
@@ -188,7 +188,7 @@ package fr.prettysimple.test
 		 * to make map scaling look like it performs at screen center 
 		 * 
 		 */		
-		private function updateAfterZoom():void
+		private function updateAfterZoomIn():void
 		{
 			var changePt:Point = localToGlobal(zoomPoint);
 			var dest:Point = screenCenter.subtract(changePt);
@@ -197,6 +197,22 @@ package fr.prettysimple.test
 			
 			this.x += dest.x;
 			this.y += dest.y;
+		}
+		
+		/**
+		 * Compensate map movements after each tween update
+		 * to make map scaling look like it performs at screen center 
+		 * 
+		 */		
+		private function updateAfterZoomOut():void
+		{
+			var changePt:Point = localToGlobal(zoomPoint);
+			var dest:Point = changePt.subtract(screenCenter);
+			
+			dest = protectEdges(dest);
+			
+			this.x -= dest.x;
+			this.y -= dest.y;
 		}
 		
 		/**
@@ -221,9 +237,19 @@ package fr.prettysimple.test
 				dest.x = 0;
 			}
 			
+			if(dest.x + (Config.MAP_WIDTH * scaleX) < stage.stageWidth)
+			{
+				dest.x = stage.stageWidth - (Config.MAP_WIDTH * scaleX);
+			}
+			
 			if(dest.y > 0)
 			{
 				dest.y = 0;
+			}
+			
+			if(dest.y + (Config.MAP_HEIGHT * scaleY) < stage.stageHeight)
+			{
+				dest.y = stage.stageHeight - (Config.MAP_HEIGHT * scaleY);
 			}
 			
 			return dest;

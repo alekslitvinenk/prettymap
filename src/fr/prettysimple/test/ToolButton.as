@@ -6,6 +6,11 @@ package fr.prettysimple.test
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	
+	/**
+	 * Base class for tools 
+	 * @author Alexander Litvinenko
+	 * 
+	 */	
 	public class ToolButton extends Sprite
 	{
 		private var content:DisplayObject;

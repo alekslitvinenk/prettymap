@@ -8,16 +8,18 @@ package fr.prettysimple.test
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
+	/**
+	 * Popup window 
+	 * @author Alexander Litvinenko
+	 * 
+	 */	
 	public class PopupWindow extends Sprite
 	{
-		private var back:Sprite;
 		private var border:DisplayObject;
 		private var closeBtn:Button;
-		private var text:TextField;
 		
 		public function PopupWindow()
 		{
@@ -26,12 +28,7 @@ package fr.prettysimple.test
 		
 		private function init():void
 		{
-			addChild(back = new Sprite());
-			var str:String = "Hello Madison!";
-			back.addChild(border = new Image(Texture.fromBitmap(new Assets.window_png())));
-			back.addChild(text = new TextField(border.width, border.height, str, "Verdana", 20));
-			text.autoScale = true;
-			back.flatten();
+			addChild(border = new Image(Texture.fromBitmap(new Assets.window_png())));
 			
 			var cbATlas:TextureAtlas = new TextureAtlas(Texture.fromBitmap(new Assets.close_png()), XML(new Assets.close_xml()));
 			
