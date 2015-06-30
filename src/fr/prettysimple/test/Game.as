@@ -118,6 +118,7 @@ package fr.prettysimple.test
 			
 			addChild(map = new Map(textures));
 			map.initScale(stage.stageWidth/Config.MAP_WIDTH);
+			map.scrollTo(Config.BROOKLIN_BRIDGE, false);
 			map.addEventListener(TouchEvent.TOUCH, onMapTouch);
 		}
 		

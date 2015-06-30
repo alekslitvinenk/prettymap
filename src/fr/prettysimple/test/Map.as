@@ -152,21 +152,30 @@ package fr.prettysimple.test
 		 * @param dest
 		 * 
 		 */		
-		public function scrollTo(dest:Point):void
+		public function scrollTo(dest:Point, animate:Boolean = true):void
 		{
 			var center:Point = new Point(stage.stageWidth >> 1, stage.stageHeight >> 1);
 			var delta:Point = localToGlobal(dest).subtract(center);
 			
-			var tween:Tween = new Tween(this, 0.3);
-			tween.moveTo(this.x - delta.x, this.y - delta.y);
-			tween.onUpdate = updateAfterScroll;
-			
-			Starling.juggler.removeTweens(this);
-			Starling.juggler.add(tween);
+			if(animate)
+			{
+				var tween:Tween = new Tween(this, 0.3);
+				tween.moveTo(this.x - delta.x, this.y - delta.y);
+				tween.onUpdate = updateAfterScroll;
+				
+				Starling.juggler.removeTweens(this);
+				Starling.juggler.add(tween);
+			}else
+			{
+				var mapPoint:Point = new Point(x, y);
+				var pos:Point = mapPoint.subtract(delta);
+				
+				moveTo(pos);
+			}
 		}
 		
 		/**
-		 * Instantly moves map to destination point 
+		 * Instantly moves map to certain position 
 		 * @param dest
 		 * 
 		 */			
@@ -187,8 +196,6 @@ package fr.prettysimple.test
 		{
 			var changePt:Point = localToGlobal(zoomPoint);
 			var delta:Point = screenCenter.subtract(changePt);
-			
-			delta = protectEdges(delta);
 			
 			this.x += delta.x;
 			this.y += delta.y;
