@@ -186,12 +186,12 @@ package fr.prettysimple.test
 		private function updateAfterZoomIn():void
 		{
 			var changePt:Point = localToGlobal(zoomPoint);
-			var dest:Point = screenCenter.subtract(changePt);
+			var delta:Point = screenCenter.subtract(changePt);
 			
-			dest = protectEdges(dest);
+			delta = protectEdges(delta);
 			
-			this.x += dest.x;
-			this.y += dest.y;
+			this.x += delta.x;
+			this.y += delta.y;
 		}
 		
 		/**
@@ -201,13 +201,15 @@ package fr.prettysimple.test
 		 */		
 		private function updateAfterZoomOut():void
 		{
+			var mapPoint:Point = new Point(x, y);
 			var changePt:Point = localToGlobal(zoomPoint);
-			var dest:Point = changePt.subtract(screenCenter);
+			var delta:Point = screenCenter.subtract(changePt);
+			var dest:Point = mapPoint.add(delta);
 			
 			dest = protectEdges(dest);
 			
-			this.x -= dest.x;
-			this.y -= dest.y;
+			this.x = dest.x;
+			this.y = dest.y;
 		}
 		
 		/**
